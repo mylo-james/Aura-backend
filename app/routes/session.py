@@ -22,9 +22,11 @@ def checkPassword(password):
         return True
 
 
-@bp.route('', methods=["POST"])
+@bp.route('/register', methods=["POST"])
+#pylist=disable:'no-member'
 def register():
     data = request.json
+    print(data)
 
     if not data['email']:
         return {"error": 'Please provide an Email'}, 401
