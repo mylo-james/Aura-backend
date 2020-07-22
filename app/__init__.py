@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 
 from app.config import Configuration
-from app.routes import session
+from app.routes import session, mood
 from app.models import db
 
 app = Flask(__name__)
@@ -13,4 +13,5 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 app.register_blueprint(session.bp)
+app.register_blueprint(mood.bp)
 

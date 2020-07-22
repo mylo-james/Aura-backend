@@ -22,6 +22,6 @@ class Mood(db.Model):
     action = db.relationship("Action", back_populates="mood")
 
     
-    @property
+   
     def to_dict(self):
         return {"id": self.id, "user_id": self.user_id, "level": self.level, "title": self.title, "content": self.content, "created_at": self.created_at, "updated_at": self.updated_at}

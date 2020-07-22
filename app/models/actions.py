@@ -9,7 +9,7 @@ class Action(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     mood_id = db.Column(db.Integer, db.ForeignKey("moods.id"), nullable=False)
-    name = db.Column(db.String(50))
+    act_id = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
                            server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime(timezone=True),
