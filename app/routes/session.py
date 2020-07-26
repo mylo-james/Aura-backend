@@ -28,10 +28,10 @@ def register():
     data = request.json
     print(data)
 
-    if not data['email']:
-        return {"error": 'Please provide an Email'}, 401
-    if User.query.filter(User.email == data['email']).first():
-        return {"error": 'Email already exists'}, 401
+    if not data['phoneNumber']:
+        return {"error": 'Please provide an phone number'}, 401
+    if User.query.filter(User.phoneNumber == data['phoneNumber']).first():
+        return {"error": 'Phone number already exists'}, 401
 
     if not data['name']:
         return {'error': "Please provide your Name"}, 401
@@ -45,12 +45,12 @@ def register():
     if data['password'] != data['confirmPassword']:
         return {'error': "Passwords do not match"}, 401
     try:
-        user = User(password=data['password'], email=data['email'], name=data['name'])
+        user = User(password=data['password'], phoneNumber=data['phoneNumber'], name=data['name'])
 
         db.session.add(user)
         db.session.commit()
        
-        access_token = jwt.encode({'email': user.email}, Configuration.SECRET_KEY)
+        access_token = jwt.encode({'phoneNumber': user.phoneNumber}, Configuration.SECRET_KEY)
         
         return {'access_token': access_token.decode('UTF-8'), 'user': user.to_dict()}
 
@@ -62,16 +62,16 @@ def register():
 def login():
     data = request.json
     print(data)
-    if not data['email']:
-        return {"error": "Please provide an email"}, 401
+    if not data['phoneNumber']:
+        return {"error": "Please provide an phone number"}, 401
     if not data['password']:
         return{ "error": "Please provide a Password"}, 401
-    user = User.query.filter(User.email == data['email']).first()
+    user = User.query.filter(User.phoneNumber == data['phoneNumber']).first()
     if not user:
-        return {"error": "Email was not found"}, 422
+        return {"error": "Phone number was not found"}, 422
     if user.check_password(data['password']):
         access_token = jwt.encode(
-            {'email': user.email}, Configuration.SECRET_KEY)
+            {'phoneNumber': user.phoneNumber}, Configuration.SECRET_KEY)
         print(access_token)
         return {'access_token': access_token.decode('UTF-8'), 'user': user.to_dict()}
     else:
@@ -87,7 +87,7 @@ def check():
         decoded = jwt.decode(data['access_token'], Configuration.SECRET_KEY)
         
         user = User.query.filter(
-            User.email == decoded.get('email')).first()
+            User.phoneNumber == decoded.get('phoneNumber')).first()
         return {'user': user.to_dict()}
     except:
         return {'error': 'invalid auth token'}, 401
@@ -97,5 +97,5 @@ def check():
 
 @ bp.route('', methods = ["DELETE"])
 def logout():
-    access_token=jwt.encode({'email': ''}, Configuration.SECRET_KEY)
+    access_token=jwt.encode({'phoneNumber': ''}, Configuration.SECRET_KEY)
     return {'access_token': access_token.decode('UTF-8'), 'user': ''}

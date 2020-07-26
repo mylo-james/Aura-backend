@@ -9,7 +9,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), unique=True, nullable=False)
+    phoneNumber = db.Column(db.Integer, unique=True, nullable=False)
     hashed_password = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True),
@@ -23,16 +23,16 @@ class User(db.Model):
     
     
 
-    @validates('name', 'email')
+    @validates('name', 'phoneNumber')
     def validate_values(self, key, value):
         if key == 'name':
             if not value:
                 raise AssertionError('Must provide a username!')
-        if key == 'email':
+        if key == 'phoneNumber':
             if not value:
-                raise AssertionError('Must provide an email!')
-            if User.query.filter(User.email == value).first():
-                raise AssertionError('Email already exists!')
+                raise AssertionError('Must provide an phone number!')
+            if User.query.filter(User.phoneNumber == value).first():
+                raise AssertionError('Phone Number already exists!')
         return value                    
 
     
@@ -48,4 +48,4 @@ class User(db.Model):
         return check_password_hash(self.hashed_password, password)
 
     def to_dict(self):
-        return {"id": self.id, "email": self.email, "name": self.name, "created_at": self.created_at, "updated_at": self.updated_at}
+        return {"id": self.id, "phoneNumber": self.phoneNumber, "name": self.name, "created_at": self.created_at, "updated_at": self.updated_at}
